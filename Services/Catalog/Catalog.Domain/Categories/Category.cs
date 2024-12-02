@@ -9,11 +9,19 @@ public class Category : AggregateRoot<CategoryId>
     public bool IsActive { get; private set; }
     
 
-    internal Category CreateNew(string title, string description)
+    public static Category CreateNew(string title, string description)
     {
         return new Category(title, description);
     }
+    public static Category CreateForDelete(CategoryId categoryId)
+    {
+        return new Category(categoryId);
+    }
     private Category() { }
+    private Category(CategoryId id)
+    {
+        Id = id;
+    }
 
     private Category(string title, string description)
     {

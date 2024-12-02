@@ -11,12 +11,20 @@ public class Product : AggregateRoot<ProductId>
     public double Price { get; private set; }
     public readonly CategoryId CategoryId;
 
-    internal Product CreateNew(string name, string description, double code, double price, CategoryId categoryId)
+    public static Product CreateNew(string name, string description, double code, double price, CategoryId categoryId)
     {
         return new Product(name, description, code, price, categoryId);
     }
+    public static Product CreateForDelete(ProductId productId)
+    {
+        return new Product(productId);
+    }
     
     private Product() { }
+    public Product(ProductId productId)
+    {
+        Id = productId;
+    }
 
     private Product(string name, string description, double code, double price, CategoryId categoryId)
     {

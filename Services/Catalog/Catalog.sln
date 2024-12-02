@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163 d17.12
+VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.API", "Catalog.API\Catalog.API.csproj", "{48A026C4-86D3-4C89-B0E7-F86F438BF572}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Application", "Catalog.Application\Catalog.Application.csproj", "{BE2532BE-20A9-459D-9BF2-D265B236374D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Infrastructure", "Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{88C47766-4CEE-40A9-AE47-E9015CA8D9DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Infrastructure.Database", "Catalog.Infrastructure.Database\Catalog.Infrastructure.Database.csproj", "{89383F88-8D25-4C36-8D60-DEB00A15E36E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{88C47766-4CEE-40A9-AE47-E9015CA8D9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88C47766-4CEE-40A9-AE47-E9015CA8D9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88C47766-4CEE-40A9-AE47-E9015CA8D9DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89383F88-8D25-4C36-8D60-DEB00A15E36E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89383F88-8D25-4C36-8D60-DEB00A15E36E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89383F88-8D25-4C36-8D60-DEB00A15E36E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89383F88-8D25-4C36-8D60-DEB00A15E36E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
