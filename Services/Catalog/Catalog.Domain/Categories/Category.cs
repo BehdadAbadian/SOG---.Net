@@ -11,7 +11,8 @@ public class Category : AggregateRoot<CategoryId>
 
     public static Category CreateNew(string title, string description)
     {
-        return new Category(title, description);
+        var categoryId = new CategoryId(Guid.NewGuid());
+        return new Category(title, description, categoryId);
     }
     public static Category CreateForDelete(CategoryId categoryId)
     {
@@ -23,8 +24,9 @@ public class Category : AggregateRoot<CategoryId>
         Id = id;
     }
 
-    private Category(string title, string description)
+    private Category(string title, string description, CategoryId id)
     {
+        Id= id;
         Title = title;
         Description = description;
         IsActive = true;

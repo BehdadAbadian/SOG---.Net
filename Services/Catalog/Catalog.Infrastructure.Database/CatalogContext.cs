@@ -9,6 +9,8 @@ public class CatalogContext : DbContext
 {
     public DbSet<Category> categories { get; set; }
     public DbSet<Product> products { get; set; }
+
+    public CatalogContext(DbContextOptions<CatalogContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var assembly = typeof(CategoryConfiguration).Assembly;

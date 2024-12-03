@@ -13,26 +13,31 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
-    public void Delete(ProductId productId)
+    public void Delete(string name)
     {
-        var product = Product.CreateForDelete(productId);
+        var product = _context.products.SingleOrDefault(x => x.Name == name);
         _context.products.Remove(product);
         
     }
 
     public async Task<bool> Exists(string name)
     {
-        return await _context.products.AllAsync(c => c.Name == name);
+        return await _context.products.AnyAsync(c => c.Name == name);
     }
 
     public async Task<List<Product>> GetAll()
     {
-        return await _context.products.ToListAsync();
+        return await _context.products.AsNoTracking().ToListAsync();
     }
 
     public async Task<Product> GetById(ProductId productId)
     {
         return await _context.products.FindAsync(productId);
+    }
+
+    public async Task<Product> GetByName(string name)
+    {
+        return await _context.products.SingleOrDefaultAsync(x => x.Name == name);
     }
 
     public async Task<ProductId> Insert(Product product)

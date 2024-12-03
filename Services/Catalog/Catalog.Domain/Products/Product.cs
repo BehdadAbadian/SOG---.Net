@@ -13,7 +13,8 @@ public class Product : AggregateRoot<ProductId>
 
     public static Product CreateNew(string name, string description, double code, double price, CategoryId categoryId)
     {
-        return new Product(name, description, code, price, categoryId);
+        var productId = new ProductId(Guid.NewGuid());
+        return new Product(productId, name, description, code, price, categoryId);
     }
     public static Product CreateForDelete(ProductId productId)
     {
@@ -26,10 +27,11 @@ public class Product : AggregateRoot<ProductId>
         Id = productId;
     }
 
-    private Product(string name, string description, double code, double price, CategoryId categoryId)
+    private Product(ProductId id, string name, string description, double code, double price, CategoryId categoryId)
     {
         if (Price < 0)
             throw new BusinessRuleException("The Price Cant be Negative");
+        Id = id;
         Name = name;
         Description = description;
         Code = code;
