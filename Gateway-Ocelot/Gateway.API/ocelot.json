@@ -1,0 +1,150 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/user/getall",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7150
+        }
+      ],
+      "UpstreamPathTemplate": "/user/getall",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/category/getall",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 55002
+        }
+      ],
+      "UpstreamPathTemplate": "/category/getall",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/category/add",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 55002
+        }
+      ],
+      "UpstreamPathTemplate": "/category/add",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/category/delete",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 55002
+        }
+      ],
+      "UpstreamPathTemplate": "/category/delete",
+      "UpstreamHttpMethod": [ "Delete" ]
+    }
+    //{
+    //  "DownstreamPathTemplate": "/api/Product",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 7297
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/products",
+    //  "UpstreamHttpMethod": [ "Get" ],
+    //  //"FileCacheOptions": {
+    //  //  "TtlSeconds": 15,
+    //  //  "Region": "product-get-all-caching"
+    //  //},
+    //  "AuthenticationOptions": {
+    //    "AuthenticationProviderKey": "IdentityApiKey",
+    //    "AllowedScopes": []
+    //  }
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/api/Product/{id}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 7297
+    //    },
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5001
+    //    }
+    //  ],
+    //  "LoadBalancer": "RoundRobin",
+    //  //"LoadBalancer": "LeastConnection",
+    //  "UpstreamPathTemplate": "/products/{id}",
+    //  "UpstreamHttpMethod": [ "Get" ],
+    //  "RateLimitOptions": {
+    //    "ClientWhitelist": ["https://devtube.ir"],
+    //    "EnableRateLimiting": true,
+    //    "Period": "15s",
+    //    "PeriodTimespan": 1,
+    //    "Limit": 1,
+    //    "HttpStatusCode": "429"
+    //  }
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/api/Order",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 7253
+    //    }
+    //  ],
+    //  //"FileCacheOptions": {
+    //  //  "TtlSeconds": 30,
+    //  //  "Region": "productcaching"
+    //  //},
+    //  //"AuthenticationOptions": {
+    //  //  "AuthenticationProviderKey": "IdentityApiKey",
+    //  //  "AllowedScopes": []
+    //  //},
+    //  "UpstreamPathTemplate": "/orders",
+    //  "UpstreamHttpMethod": [ "Post" ]
+    //},
+    //{
+    //  "DownstreamPathTemplate": "/api/Order/{id}",
+    //  "DownstreamScheme": "https",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 7253
+    //    }
+    //    //{
+    //    //  "Host": "localhost",
+    //    //  "Port": 5001
+    //    //}
+    //  ],
+    //  //"FileCacheOptions": {
+    //  //  "TtlSeconds": 30,
+    //  //  "Region": "productscaching"
+    //  //},
+    //  //"RateLimitOptions": {
+    //  //  "ClientWhitelist": [],
+    //  //  "EnableRateLimiting": true,
+    //  //  "Period": "5s",
+    //  //  "PeriodTimespan": 1,
+    //  //  "Limit": 1
+    //  //},
+    //  //"LoadBalancer": "RoundRobin",
+    //  //"LoadBalancer": "LeastConnection",
+    //  "UpstreamPathTemplate": "/orders/{id}",
+    //  "UpstreamHttpMethod": [ "Get" ]
+    //}
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:7227"
+  }
+}
