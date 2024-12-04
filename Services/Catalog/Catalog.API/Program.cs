@@ -1,10 +1,14 @@
 using Catalog.API.Configuration;
 using Catalog.Application.CategoryCommandQuery.Command;
 using Catalog.Infrastructure;
+using static Catalog.API.Protos.Permission;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddGrpcClient<PermissionClient>(o => {
+    o.Address = new Uri(builder.Configuration["GRPC_Permission_Server_Address"]);
+});
 builder.Services.AddLogging(logging =>
 logging.AddSeq(builder.Configuration.GetSection("Seq")));
 
@@ -26,11 +30,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();

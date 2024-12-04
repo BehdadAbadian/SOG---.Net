@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "Security.API.Protos";
+
+
+service Permission
+{
+	rpc Check(CheckPermissionRequest) returns(CheckPermissionRespond);
+}
+
+message CheckPermissionRequest
+{
+	string role = 1;
+}
+
+message CheckPermissionRespond 
+{
+	bool success = 1;
+	string message = 2;
+}
