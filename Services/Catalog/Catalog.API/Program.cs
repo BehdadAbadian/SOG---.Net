@@ -1,7 +1,13 @@
+using Azure.Core;
 using Catalog.API.Configuration;
+using Catalog.API.MiniAPI;
 using Catalog.Application.CategoryCommandQuery.Command;
+using Catalog.Application.CategoryCommandQuery.Query;
 using Catalog.Infrastructure;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using static Catalog.API.Protos.Permission;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +26,7 @@ builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssemblies(typeof(AddCategoryCommand).Assembly);
 });
 
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -36,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
+app.AddMiniAPI();
 
 app.Run();
