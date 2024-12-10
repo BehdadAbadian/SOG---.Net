@@ -1,5 +1,6 @@
 using Azure.Core;
 using Catalog.API.Configuration;
+using Catalog.API.Middleware;
 using Catalog.API.MiniAPI;
 using Catalog.Application.CategoryCommandQuery.Command;
 using Catalog.Application.CategoryCommandQuery.Query;
@@ -21,6 +22,8 @@ logging.AddSeq(builder.Configuration.GetSection("Seq")));
 builder.Services.AddInfrastructureSetup();
 builder.Services.AddDataBaseSetup(builder.Configuration);
 
+builder.Services.AddScoped<LoggerMiddleware>();
+
 builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(typeof(AddCategoryCommand).Assembly);
@@ -31,6 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+app.UseMiddleware<LoggerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
