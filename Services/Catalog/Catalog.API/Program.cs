@@ -22,7 +22,7 @@ logging.AddSeq(builder.Configuration.GetSection("Seq")));
 builder.Services.AddInfrastructureSetup();
 builder.Services.AddDataBaseSetup(builder.Configuration);
 
-builder.Services.AddScoped<LoggerMiddleware>();
+builder.Services.AddScoped<DataValidationMiddleware>();
 
 builder.Services.AddMediatR(options =>
 {
@@ -34,7 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-app.UseMiddleware<LoggerMiddleware>();
+app.UseMiddleware<DataValidationMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
