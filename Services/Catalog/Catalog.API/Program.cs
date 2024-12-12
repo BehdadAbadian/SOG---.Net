@@ -21,6 +21,7 @@ logging.AddSeq(builder.Configuration.GetSection("Seq")));
 
 builder.Services.AddInfrastructureSetup();
 builder.Services.AddDataBaseSetup(builder.Configuration);
+builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<DataValidationMiddleware>();
 
