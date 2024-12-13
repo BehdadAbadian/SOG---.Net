@@ -1,34 +1,62 @@
 using Microsoft.Extensions.DependencyInjection;
 using Security.API.Services;
+using Serilog;
 using static Security.API.Protos.Permission;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddGrpc();
 
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .Build();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+Log.Information("Starting up Security Project");
+try
 {
-    app.MapOpenApi();
+    var builder = WebApplication.CreateBuilder(args);
+
+
+
+    builder.Services.AddSerilog((services, lc) => lc
+        .ReadFrom.Configuration(configuration)
+        .ReadFrom.Services(services));
+
+    // Add services to the container.
+    builder.Services.AddGrpc();
+
+    builder.Services.AddControllers();
+    builder.Services.AddOpenApi();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapGrpcService<PermissionService>();
+    });
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-app.UseRouting();
-
-app.UseEndpoints(endpoints =>
+catch(Exception ex)
 {
-    endpoints.MapGrpcService<PermissionService>();
-});
-
-app.Run();
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

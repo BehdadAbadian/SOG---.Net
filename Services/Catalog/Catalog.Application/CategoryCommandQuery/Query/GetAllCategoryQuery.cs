@@ -2,6 +2,7 @@
 using Catalog.Infrastructure.Patterns;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Catalog.Application.CategoryCommandQuery.Query;
 
@@ -19,13 +20,12 @@ public class GetAllCategoryQueryRespond
 
 public class GetAllCategoryQueryHandler : IRequestHandler<GetAllCategoryQuery, List<GetAllCategoryQueryRespond>>
 {
-    private readonly ILogger<GetAllCategoryQueryHandler> _logger;
+
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICategoryRepository _categoryRepository;
 
-    public GetAllCategoryQueryHandler(ILogger<GetAllCategoryQueryHandler> logger, ICategoryRepository categoryRepository)
+    public GetAllCategoryQueryHandler(ICategoryRepository categoryRepository)
     {
-        _logger = logger;
         _categoryRepository = categoryRepository;
     }
 
@@ -44,7 +44,7 @@ public class GetAllCategoryQueryHandler : IRequestHandler<GetAllCategoryQuery, L
             };
             getAllCategoryQueryResponds.Add(i);
         });
-        _logger.LogInformation("Create list of All Categories");
+        Log.Information("Create list of All Categories");
         return getAllCategoryQueryResponds;
     }
 }

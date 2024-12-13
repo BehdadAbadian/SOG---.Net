@@ -1,4 +1,5 @@
 ﻿using Catalog.Application.CategoryCommandQuery.Command;
+using Serilog;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -7,12 +8,7 @@ namespace Catalog.API.Middleware;
 
 public class DataValidationMiddleware : IMiddleware
 {
-    private readonly ILogger<DataValidationMiddleware> _logger;
 
-    public DataValidationMiddleware(ILogger<DataValidationMiddleware> logger)
-    {
-        _logger = logger;
-    }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -32,7 +28,7 @@ public class DataValidationMiddleware : IMiddleware
                     if (string.IsNullOrEmpty(addCategoryCommand.Title))
                     {
                         context.Response.StatusCode = 400;
-                        _logger.LogInformation("In Input data Title is null, status code : {0}", context.Response.StatusCode);
+                        Log.Information("In Input data Title is null, status code : {0}", context.Response.StatusCode);
                         await context.Response.WriteAsJsonAsync<AddCategoryCommandRespond>(new AddCategoryCommandRespond { Messasge = "Title is null" });
 
                     }
@@ -44,7 +40,7 @@ public class DataValidationMiddleware : IMiddleware
                 catch (JsonException je)
                 {
                     context.Response.StatusCode = 400;
-                    _logger.LogWarning("Invalid Input, Exception message : {0}, status code : {1}", je.Message, context.Response.StatusCode);
+                    Log.Warning("Invalid Input, Exception message : {0}, status code : {1}", je.Message, context.Response.StatusCode);
                     await context.Response.WriteAsJsonAsync<AddCategoryCommandRespond>(new AddCategoryCommandRespond { Messasge = "Invalid Input" });
 
                 };

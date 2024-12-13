@@ -2,6 +2,7 @@
 using Catalog.Infrastructure.Patterns;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Catalog.Application.CategoryCommandQuery.Command;
 
@@ -17,13 +18,11 @@ public class DeleteCategoryCommandRespond
 
 public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, DeleteCategoryCommandRespond>
 {
-    private readonly ILogger<DeleteCategoryCommandHandler> _logger;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteCategoryCommandHandler(ILogger<DeleteCategoryCommandHandler> logger, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
+    public DeleteCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     {
-        _logger = logger;
         _categoryRepository = categoryRepository;
         _unitOfWork = unitOfWork;
     }
@@ -31,12 +30,12 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
     {
         if(!await _categoryRepository.Exists(request.Title))
         {
-            _logger.LogWarning("Record With This Name Not Found!, Name : {0}", request.Title);
+            Log.Warning("Record With This Name Not Found!, Name : {0}", request.Title);
             return new DeleteCategoryCommandRespond { Message = "Record With This Name Not Found!" };
         }
         _categoryRepository.Delete(request.Title);
         await _unitOfWork.SaveChanges();
-        _logger.LogInformation("Record with Name : {0} from Database deleted!", request.Title);
+        Log.Information("Record with Name : {0} from Database deleted!", request.Title);
         return new DeleteCategoryCommandRespond { Message = "Done" };
 
     }

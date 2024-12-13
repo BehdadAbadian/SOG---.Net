@@ -3,7 +3,10 @@ using Catalog.Application.CategoryCommandQuery.Query;
 using Catalog.Appllication.Contract.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.Json;
 using static Catalog.API.Protos.Permission;
 
 namespace Catalog.API.MiniAPI;
@@ -14,29 +17,26 @@ public static class CategoryMiniAPI
     {
         app.MapGet("/Category/getall", async Task<CatalogActionResult<List<GetAllCategoryQueryRespond>>> (IMediator _mediator, PermissionClient _permission) =>
         {
-        
+            var result = new CatalogActionResult<List<GetAllCategoryQueryRespond>>();
             var pCheck = await _permission.CheckAsync(new Catalog.API.Protos.CheckPermissionRequest { Role = "Admin" });
+
             if (pCheck.Success)
-            {
-                var data = await _mediator.Send(new GetAllCategoryQuery());
-                return new CatalogActionResult<List<GetAllCategoryQueryRespond>>
-                {
-                    Data = data,
-                    IsSuccess = true,
-                    StatusCode = 200,
-                    Message = "Ok"
-                   
-                };
+            {           
+                    var data = await _mediator.Send(new GetAllCategoryQuery());
+
+                    result.Data = data;
+                    result.IsSuccess = true;
+                    result.StatusCode = 200;
+                    result.Message = "OK";
+                    return result;                
             }
             else 
-            { 
-                return new CatalogActionResult<List<GetAllCategoryQueryRespond>> 
-                {
-                    
-                    IsSuccess = false,
-                    StatusCode = 403,
-                    Message = "access to the requested resource is forbidden"
-                }; 
+            {
+                result.IsSuccess = false;
+                result.StatusCode = 403;
+                result.Message = "access to the requested resource is forbidden"; 
+                return result;
+                 
             }
         });
 

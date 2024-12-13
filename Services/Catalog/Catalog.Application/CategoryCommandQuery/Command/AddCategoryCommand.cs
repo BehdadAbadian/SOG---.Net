@@ -3,6 +3,7 @@ using Catalog.Domain.Categories;
 using Catalog.Infrastructure.Patterns;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Catalog.Application.CategoryCommandQuery.Command;
 
@@ -21,26 +22,26 @@ public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Add
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<AddCategoryCommandHandler> _logger;
 
-    public AddCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, ILogger<AddCategoryCommandHandler> logger)
+
+    public AddCategoryCommandHandler(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     {
         
         _categoryRepository = categoryRepository;
         _unitOfWork = unitOfWork;
-        _logger = logger;
+
     }
     public async Task<AddCategoryCommandRespond> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
     {
         if (await _categoryRepository.Exists(request.Title))
         {
-            _logger.LogWarning("Duplicated Title for Category, Title : {0}", request.Title);
+            Log.Warning("Duplicated Title for Category, Title : {0}", request.Title);
             return new AddCategoryCommandRespond { Messasge = "نام تکراری میباشد!" };
         }
         var category = Category.CreateNew(request.Title, request.Description);
         await _categoryRepository.Insert(category);
         await _unitOfWork.SaveChanges();
-        _logger.LogInformation("new Category Insert to Database, category Title : {0}", request.Title);
+        Log.Information("new Category Insert to Database, category Title : {0}", request.Title);
         return new AddCategoryCommandRespond { Id = category.Id.Value, Messasge = "دسته بندی با موفقیت اضافه شد!" };
 
     }
