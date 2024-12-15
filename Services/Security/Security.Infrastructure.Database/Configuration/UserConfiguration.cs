@@ -18,6 +18,7 @@ namespace Security.Infrastructure.Database.Configuration
             builder.Property(t => t.Name).IsRequired().HasMaxLength(20);
             builder.Property(t => t.Email).IsRequired();
             builder.Property(t => t.Password).IsRequired();
+            builder.Property(t => t.PasswordSalt).IsRequired();
             builder.Property(t => t.CreationDate).IsRequired();
             builder.Property(t => t.LastLogin).IsRequired();
 

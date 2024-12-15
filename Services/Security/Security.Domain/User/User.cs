@@ -5,24 +5,23 @@ namespace Security.Domain.User
 {
     public class User
     {
-        [BsonId]
         public Guid Id { get; private set; }
-        [BsonElement("Name")]
         public string? Name { get; private set; }
         public string? Email { get; private set; }
         public string? Password { get; private set; }
+        public string? PasswordSalt { get; set; }
         public DateTime CreationDate { get; private set; }
         public DateTime LastLogin { get; private set; }
 
-        public static User CreateNew(string name, string email, string password)
+        public static User CreateNew(string name, string email, string password, string passwordSalt)
         {
             var id = Guid.NewGuid();
-            return new User(id, name, email, password);
+            return new User(id, name, email, password, passwordSalt);
 
         }
 
         private User() { }
-        private User(Guid id, string name, string email, string password)
+        private User(Guid id, string name, string email, string password, string passwordSalt)
         {
 
 
@@ -30,6 +29,7 @@ namespace Security.Domain.User
             Name = name;
             Email = email;
             Password = password;
+            PasswordSalt = passwordSalt;
             CreationDate = DateTime.Now;
             LastLogin = DateTime.Now;
         }

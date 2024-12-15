@@ -5,6 +5,7 @@ using Security.Domain.User;
 using Security.Infrastructure.Database;
 using Security.Infrastructure.Pattern;
 using Security.Infrastructure.Repository;
+using Security.Infrastructure.Utility.Encryption;
 using Serilog;
 using static Security.API.Protos.Permission;
 
@@ -40,6 +41,7 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddDataBaseSetup(builder.Configuration);
     Security.Infrastructure.InfrastructureSetup.AddInfrastructure(builder.Services);
+    builder.Services.AddScoped<EncryptionUtility>();
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
