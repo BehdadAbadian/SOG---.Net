@@ -1,5 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Security.API.Services;
+using Security.Domain.User;
+using Security.Infrastructure.Database;
+using Security.Infrastructure.Pattern;
+using Security.Infrastructure.Repository;
 using Serilog;
 using static Security.API.Protos.Permission;
 
@@ -14,6 +18,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 Log.Information("Starting up Security Project");
+
 try
 {
     var builder = WebApplication.CreateBuilder(args);
@@ -26,10 +31,10 @@ try
 
     // Add services to the container.
     builder.Services.AddGrpc();
-
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
-
+    builder.Services.AddDataBaseSetup(builder.Configuration);
+    Security.Infrastructure.InfrastructureSetup.AddInfrastructure(builder.Services);
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -39,11 +44,9 @@ try
     }
 
     app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
     app.MapControllers();
     app.UseRouting();
+    app.UseAuthorization();
 
     app.UseEndpoints(endpoints =>
     {
@@ -52,7 +55,7 @@ try
 
     app.Run();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
