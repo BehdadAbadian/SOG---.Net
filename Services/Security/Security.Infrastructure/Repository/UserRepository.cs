@@ -27,6 +27,11 @@ public class UserRepository : IUserRepository
         _context.users.Remove(entity);
     }
 
+    public async Task<bool> Exits(string name)
+    {
+        return await _context.users.AnyAsync(x => x.Name == name);
+    }
+
     public async Task<List<User>> GetAll(int page = 0, int size = 0)
     {
         if (page == 0 || size == 0) 

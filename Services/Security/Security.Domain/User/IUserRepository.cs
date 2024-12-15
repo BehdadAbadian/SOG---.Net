@@ -9,4 +9,5 @@ public interface IUserRepository
     public Task<long> Count();
     public Task<User> GetById(Guid id);
     public User Search(string search = "");
+    public Task<bool> Exits(string name);
 }

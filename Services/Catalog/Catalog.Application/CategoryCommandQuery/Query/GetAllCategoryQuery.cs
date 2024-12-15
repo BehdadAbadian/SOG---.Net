@@ -21,7 +21,6 @@ public class GetAllCategoryQueryRespond
 public class GetAllCategoryQueryHandler : IRequestHandler<GetAllCategoryQuery, List<GetAllCategoryQueryRespond>>
 {
 
-    private readonly IUnitOfWork _unitOfWork;
     private readonly ICategoryRepository _categoryRepository;
 
     public GetAllCategoryQueryHandler(ICategoryRepository categoryRepository)

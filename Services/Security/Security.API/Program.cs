@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Security.API.Services;
+using Security.Application.User.Command;
 using Security.Domain.User;
 using Security.Infrastructure.Database;
 using Security.Infrastructure.Pattern;
@@ -30,6 +31,10 @@ try
         .ReadFrom.Services(services));
 
     // Add services to the container.
+    builder.Services.AddMediatR(o =>
+    {
+        o.RegisterServicesFromAssembly(typeof(SaveUserCommand).Assembly);
+    });
     builder.Services.AddGrpc();
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
