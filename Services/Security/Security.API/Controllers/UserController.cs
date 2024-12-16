@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Security.API.Model;
-using Security.Infrastructure.Repository;
-using Security.Domain.User;
+﻿using Microsoft.AspNetCore.Mvc;
 using Security.Application.User.Command;
 using Security.Application.User.Query;
 using MediatR;
 using Security.Application.Contracts.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Security.API.Controllers
 {
@@ -15,10 +12,12 @@ namespace Security.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _cache;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator,IMemoryCache cache)
         {
             _mediator = mediator;
+            _cache = cache;
         }
 
 
@@ -30,7 +29,10 @@ namespace Security.API.Controllers
             result.Data = user;
             result.IsSuccess = true;
             result.StatusCode = 200;
-            
+            if (result.StatusCode == 200) 
+            {
+                _cache.Dispose();
+            }
             return result;
             
 
@@ -39,8 +41,19 @@ namespace Security.API.Controllers
         [HttpGet("GetAll")]
         public async Task<SecurityActionResult<List<GetAllQueryRespond>>> GetAll(GetAllQuery command)
         {
-            var users  = await _mediator.Send(command);
             var result = new SecurityActionResult<List<GetAllQueryRespond>>();
+            var users = new List<GetAllQueryRespond>();
+            var cacheKey = $"GetAll-{command.Page.ToString()}-{command.PageSize.ToString()}";
+            if (!_cache.TryGetValue(cacheKey, out users))
+            {
+                users = await _mediator.Send(command);
+                var cacheOption = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = null,
+                    SlidingExpiration = null,
+                };
+                _cache.Set(cacheKey, users, cacheOption);
+            }
             result.IsSuccess = true;
             result.StatusCode = 200;
             result.Data = users;

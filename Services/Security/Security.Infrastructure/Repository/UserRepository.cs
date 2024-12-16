@@ -51,6 +51,11 @@ public class UserRepository : IUserRepository
         return await _context.users.FirstAsync(x => x.Id == id);
     }
 
+    public async Task<User> GetByName(string name)
+    {
+        return await _context.users.SingleOrDefaultAsync(x=>x.Name == name);
+    }
+
     public User Search(string search = "")
     {
         return _context.users.Where(e => e.Name.Contains(search) || e.Email.Contains(search)).FirstOrDefault();

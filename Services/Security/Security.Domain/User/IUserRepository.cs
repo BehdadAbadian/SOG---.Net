@@ -8,6 +8,7 @@ public interface IUserRepository
     public Task<List<User>> GetAll(int page = 0, int size = 0);
     public Task<long> Count();
     public Task<User> GetById(Guid id);
+    public Task<User> GetByName(string name);
     public User Search(string search = "");
     public Task<bool> Exits(string name);
 }
