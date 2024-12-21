@@ -23,7 +23,8 @@ namespace Security.Domain.User
         private User() { }
         private User(Guid id, string name, string email, string password, string passwordSalt)
         {
-
+            if (string.IsNullOrWhiteSpace(email))
+                throw new NullReferenceException();
 
             Id = id;
             Name = name;

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Security.API.Services;
+using Security.Application;
 using Security.Application.User.Command;
 using Security.Domain.User;
 using Security.Infrastructure.Database;

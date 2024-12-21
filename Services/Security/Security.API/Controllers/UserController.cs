@@ -39,9 +39,9 @@ namespace Security.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<SecurityActionResult<List<GetAllQueryRespond>>> GetAll(GetAllQuery command)
+        public async Task<SecurityActionResultWithPaging<List<GetAllQueryRespond>>> GetAll(GetAllQuery command)
         {
-            var result = new SecurityActionResult<List<GetAllQueryRespond>>();
+            var result = new SecurityActionResultWithPaging<List<GetAllQueryRespond>>();
             var users = new List<GetAllQueryRespond>();
             var cacheKey = $"GetAll-{command.Page.ToString()}-{command.PageSize.ToString()}";
             if (!_cache.TryGetValue(cacheKey, out users))
