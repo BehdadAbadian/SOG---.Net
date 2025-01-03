@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Security.API.Configurations;
 using Security.API.Services;
 using Security.Application;
 using Security.Application.User.Command;
@@ -48,6 +49,7 @@ try
     builder.Services.AddDataBaseSetup(builder.Configuration);
     Security.Infrastructure.InfrastructureSetup.AddInfrastructure(builder.Services);
     builder.Services.AddScoped<EncryptionUtility>();
+    builder.Services.AddJWT();
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.

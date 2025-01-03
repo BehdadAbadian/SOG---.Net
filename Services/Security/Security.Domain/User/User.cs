@@ -19,8 +19,12 @@ namespace Security.Domain.User
             return new User(id, name, email, password, passwordSalt);
 
         }
-
+        public void UpdateLastlogin()
+        {
+            LastLogin =  DateTime.Now;
+        }
         private User() { }
+
         private User(Guid id, string name, string email, string password, string passwordSalt)
         {
             if (string.IsNullOrWhiteSpace(email))
