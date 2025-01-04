@@ -11,7 +11,7 @@ public class SecurityContext : DbContext
     public DbSet<Permission> permissions { get; set; }
     public DbSet<Role> roles { get; set; }
     public DbSet<RolePermission> rolesPermission { get; set; }
-    public DbSet<RoleUser> usersRoles { get; set; }
+    public DbSet<RoleUser> roleUsers { get; set; }
     public SecurityContext(DbContextOptions<SecurityContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

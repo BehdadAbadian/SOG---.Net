@@ -4,6 +4,7 @@ using Security.Application.User.Query;
 using MediatR;
 using Security.Application.Contracts.Common;
 using Microsoft.Extensions.Caching.Memory;
+using Security.Application.Contracts.Interface;
 
 namespace Security.API.Controllers
 {
@@ -13,11 +14,13 @@ namespace Security.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMemoryCache _cache;
+        private readonly IPermissionApplicationService _permissionApplication;
 
-        public UserController(IMediator mediator,IMemoryCache cache)
+        public UserController(IMediator mediator,IMemoryCache cache, IPermissionApplicationService permissionApplication)
         {
             _mediator = mediator;
             _cache = cache;
+            _permissionApplication = permissionApplication;
         }
 
 
@@ -41,6 +44,9 @@ namespace Security.API.Controllers
         [HttpGet("GetAll")]
         public async Task<SecurityActionResultWithPaging<List<GetAllQueryRespond>>> GetAll(GetAllQuery command)
         {
+            var userId = Guid.Parse("51B9CB80-1C81-4974-8715-16333EB2E760");
+            var permission = "Product-GetAll";
+            var f = _permissionApplication.CheckPermission(userId, permission);
             var result = new SecurityActionResultWithPaging<List<GetAllQueryRespond>>();
             var users = new List<GetAllQueryRespond>();
             var cacheKey = $"GetAll-{command.Page.ToString()}-{command.PageSize.ToString()}";

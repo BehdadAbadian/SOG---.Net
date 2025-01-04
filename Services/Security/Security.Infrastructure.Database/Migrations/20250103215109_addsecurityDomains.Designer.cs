@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Security.Infrastructure.Database;
 
@@ -11,9 +12,11 @@ using Security.Infrastructure.Database;
 namespace Security.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(SecurityContext))]
-    partial class SecurityContextModelSnapshot : ModelSnapshot
+    [Migration("20250103215109_addsecurityDomains")]
+    partial class addsecurityDomains
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace Security.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("Security.Domain.Security.RolePermission", b =>
@@ -98,7 +101,7 @@ namespace Security.Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("roleUsers");
+                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("Security.Domain.User.User", b =>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Security.Domain.Security;
 using Security.Domain.User;
 using Security.Infrastructure.Pattern;
 using Security.Infrastructure.Repository;
@@ -9,8 +10,12 @@ public static class InfrastructureSetup
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<PermissionRepository>();
+        services.AddTransient<RolePermissionRepository>();
+        services.AddTransient<RoleUserRepository>();
+
 
     }
 }

@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Security.API.Configurations;
 using Security.API.Services;
 using Security.Application;
+using Security.Application.Contracts.Interface;
+using Security.Application.Permission;
 using Security.Application.User.Command;
 using Security.Domain.User;
 using Security.Infrastructure.Database;
@@ -49,6 +51,7 @@ try
     builder.Services.AddDataBaseSetup(builder.Configuration);
     Security.Infrastructure.InfrastructureSetup.AddInfrastructure(builder.Services);
     builder.Services.AddScoped<EncryptionUtility>();
+    builder.Services.AddScoped<IPermissionApplicationService, PermissionApplicationService>();
     builder.Services.AddJWT();
     var app = builder.Build();
 
