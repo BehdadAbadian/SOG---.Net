@@ -1,4 +1,5 @@
-﻿using Catalog.Application.CategoryCommandQuery.Command;
+﻿using Catalog.API.CustomAttributes;
+using Catalog.Application.CategoryCommandQuery.Command;
 using Catalog.Application.CategoryCommandQuery.Query;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,13 +29,12 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("GetAll")]
+    [AccessControll(Permission = "Product-GetAll")]
     public async Task<List<GetAllCategoryQueryRespond>> GetAll()
     {
 
         List<GetAllCategoryQueryRespond> result = new List<GetAllCategoryQueryRespond>();
-        var pCheck = await _permission.CheckAsync(new Protos.CheckPermissionRequest { Role = "Admin" });
-        if (pCheck.Success)
-        {
+
             Log.Information("API : Category/GetAll, ip {0}", Request.HttpContext.Connection.RemoteIpAddress);
             var cacheKey = "GetAll";
             if (!_memoryCache.TryGetValue(cacheKey, out result))
@@ -50,8 +50,7 @@ public class CategoryController : ControllerBase
             }
 
             return result;
-        }
-        else { return result; }
+
     }
 
     [HttpPost("Add")]

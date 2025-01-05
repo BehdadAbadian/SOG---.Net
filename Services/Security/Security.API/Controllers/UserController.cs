@@ -44,9 +44,7 @@ namespace Security.API.Controllers
         [HttpGet("GetAll")]
         public async Task<SecurityActionResultWithPaging<List<GetAllQueryRespond>>> GetAll(GetAllQuery command)
         {
-            var userId = Guid.Parse("51B9CB80-1C81-4974-8715-16333EB2E760");
-            var permission = "Product-GetAll";
-            var f = _permissionApplication.CheckPermission(userId, permission);
+
             var result = new SecurityActionResultWithPaging<List<GetAllQueryRespond>>();
             var users = new List<GetAllQueryRespond>();
             var cacheKey = $"GetAll-{command.Page.ToString()}-{command.PageSize.ToString()}";

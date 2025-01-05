@@ -10,7 +10,8 @@ service Permission
 
 message CheckPermissionRequest
 {
-	string role = 1;
+	string userid = 1;
+	string permissionname = 2;
 }
 
 message CheckPermissionRespond 

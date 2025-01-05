@@ -15,30 +15,30 @@ public static class CategoryMiniAPI
 {
     public static void AddMiniAPI(this WebApplication app)
     {
-        app.MapGet("/Category/getall", async Task<CatalogActionResult<List<GetAllCategoryQueryRespond>>> (IMediator _mediator, PermissionClient _permission) =>
-        {
-            var result = new CatalogActionResult<List<GetAllCategoryQueryRespond>>();
-            var pCheck = await _permission.CheckAsync(new Catalog.API.Protos.CheckPermissionRequest { Role = "Admin" });
+        //app.MapGet("/Category/getall", async Task<CatalogActionResult<List<GetAllCategoryQueryRespond>>> (IMediator _mediator, PermissionClient _permission) =>
+        //{
+        //    var result = new CatalogActionResult<List<GetAllCategoryQueryRespond>>();
+        //    var pCheck = await _permission.CheckAsync(new Catalog.API.Protos.CheckPermissionRequest { Role = "Admin" });
 
-            if (pCheck.Success)
-            {           
-                    var data = await _mediator.Send(new GetAllCategoryQuery());
+        //    if (pCheck.Success)
+        //    {           
+        //            var data = await _mediator.Send(new GetAllCategoryQuery());
 
-                    result.Data = data;
-                    result.IsSuccess = true;
-                    result.StatusCode = 200;
-                    result.Message = "OK";
-                    return result;                
-            }
-            else 
-            {
-                result.IsSuccess = false;
-                result.StatusCode = 403;
-                result.Message = "access to the requested resource is forbidden"; 
-                return result;
+        //            result.Data = data;
+        //            result.IsSuccess = true;
+        //            result.StatusCode = 200;
+        //            result.Message = "OK";
+        //            return result;                
+        //    }
+        //    else 
+        //    {
+        //        result.IsSuccess = false;
+        //        result.StatusCode = 403;
+        //        result.Message = "access to the requested resource is forbidden"; 
+        //        return result;
                  
-            }
-        });
+        //    }
+        //});
 
         app.MapPost("/Category/add", async (IMediator _mediator, AddCategoryCommand command) =>
         {
