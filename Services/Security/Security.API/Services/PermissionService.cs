@@ -1,5 +1,4 @@
 ﻿using Grpc.Core;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Security.API.Protos;
 using Security.Application.Contracts.Interface;
 using Serilog;
