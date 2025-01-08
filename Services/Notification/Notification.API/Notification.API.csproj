@@ -29,4 +29,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Notification.Infrastructure.Database\Notification.Infrastructure.Database.csproj" />
+    <ProjectReference Include="..\Notification.Infrastructure\Notification.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
