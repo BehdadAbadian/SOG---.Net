@@ -1,3 +1,6 @@
+using Notification.Application;
+using Notification.Application.Contracts.Share;
+using Notification.Application.Email.CQRS.Command;
 using Notification.Infrastructure;
 using Notification.Infrastructure.Database;
 using Serilog;
@@ -18,9 +21,19 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
+    builder.Services.AddOptions();
+    builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
+
     builder.Services.AddDataBaseSetup(builder.Configuration);
     builder.Services.AddInfrastructure();
+    builder.Services.AddServiceSetup();
     
+
+    builder.Services.AddMediatR(o => 
+    {
+        o.RegisterServicesFromAssembly(typeof(SaveEmailCommand).Assembly);
+    });
+
 
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
