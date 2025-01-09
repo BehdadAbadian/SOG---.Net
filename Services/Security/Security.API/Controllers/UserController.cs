@@ -5,6 +5,8 @@ using MediatR;
 using Security.Application.Contracts.Common;
 using Microsoft.Extensions.Caching.Memory;
 using Security.Application.Contracts.Interface;
+using Security.Application.Service.Notification;
+using Security.API.Model;
 
 namespace Security.API.Controllers
 {
@@ -15,12 +17,14 @@ namespace Security.API.Controllers
         private readonly IMediator _mediator;
         private readonly IMemoryCache _cache;
         private readonly IPermissionApplicationService _permissionApplication;
+        private readonly IMessageBrokerService _messageBroker;
 
-        public UserController(IMediator mediator,IMemoryCache cache, IPermissionApplicationService permissionApplication)
+        public UserController(IMediator mediator,IMemoryCache cache, IPermissionApplicationService permissionApplication, IMessageBrokerService messageBroker)
         {
             _mediator = mediator;
             _cache = cache;
             _permissionApplication = permissionApplication;
+            _messageBroker = messageBroker;
         }
 
 
@@ -65,6 +69,26 @@ namespace Security.API.Controllers
             result.PageSize = command.PageSize;
             return result;
 
+        }
+
+        [HttpGet("Count")]
+        public async Task<IActionResult> SendMessage(int count)
+        {
+            for (int i = 1; i < count; i++)
+            {
+                var order = new EmailDto
+                {
+                    Sender = "User Management",
+                    EmailAddress = "behdad.abadian@gmail.com",
+                    Subject = "Welcome" + i.ToString(),
+                    Body = DateTime.Now.AddDays(-i).ToShortDateString(),
+                    
+                };
+                string queueName = "email-queue";
+                await _messageBroker.SendMessage(queueName, order);
+
+            }
+            return Ok();
         }
     }
 }

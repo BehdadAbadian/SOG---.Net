@@ -2,10 +2,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Security.API.Configurations;
 using Security.API.Services;
 using Security.Application;
+using Security.Application.Contracts.Common;
 using Security.Application.Contracts.Interface;
 using Security.Application.Permission;
 using Security.Application.User.Command;
 using Security.Domain.User;
+using Security.Infrastructure;
 using Security.Infrastructure.Database;
 using Security.Infrastructure.Pattern;
 using Security.Infrastructure.Repository;
@@ -39,6 +41,7 @@ try
     // Add services to the container.
     builder.Services.AddOptions();
     builder.Services.Configure<Configs>(builder.Configuration.GetSection("Configs"));
+    builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitConfigs"));
 
     builder.Services.AddMediatR(o =>
     {
@@ -49,7 +52,8 @@ try
     builder.Services.AddMemoryCache();
     builder.Services.AddOpenApi();
     builder.Services.AddDataBaseSetup(builder.Configuration);
-    Security.Infrastructure.InfrastructureSetup.AddInfrastructure(builder.Services);
+    builder.Services.AddApplicationServiceSetup();
+    builder.Services.AddInfrastructure();
     builder.Services.AddScoped<EncryptionUtility>();
     builder.Services.AddScoped<IPermissionApplicationService, PermissionApplicationService>();
     builder.Services.AddJWT();

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using Notification.Application.Contracts.Interface;
 using Notification.Application.Contracts.Share;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Notification.Application.Email.Service;
 

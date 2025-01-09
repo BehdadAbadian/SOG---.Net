@@ -1,3 +1,4 @@
+using Notification.API.BackgroundServices;
 using Notification.Application;
 using Notification.Application.Contracts.Share;
 using Notification.Application.Email.CQRS.Command;
@@ -21,6 +22,8 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
+    builder.Services.AddHostedService<EmailConsumerHostedService>();
+
     builder.Services.AddOptions();
     builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
 
