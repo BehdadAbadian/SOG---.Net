@@ -6,6 +6,7 @@ using Notification.Application.Contracts.Dto;
 using MediatR;
 using Notification.Application.Email.CQRS.Command;
 using Notification.Application.Contracts.Interface;
+using Serilog;
 
 namespace Notification.API.BackgroundServices;
 
@@ -37,13 +38,25 @@ public class EmailConsumerHostedService : BackgroundService
             var email = JsonSerializer.Deserialize<EmailDto>(message);
 
             //_mediator.Send(new SaveEmailCommand{Sender = email.Sender, EmailAddress = email.EmailAddress, Subject = email.Subject, Body = email.Body});
+            
+            var success = _emailSender.SendEmail(email.EmailAddress, email.Sender, email.Subject, email.Body);
+            if (success)
+            {
+                channel.BasicAckAsync(ea.DeliveryTag, false);
+                Log.Information("Email Successfully Send : Sender {0}, EmailAddress : {1}, Subject : {2}, Body : {3}", email.Sender, email.EmailAddress, email.Subject, email.Body);
+            }
+            else
+            {
+                channel.BasicRejectAsync(ea.DeliveryTag, true);
+                Log.Information("Email Send Failed : Sender {0}, EmailAddress : {1}, Subject : {2}, Body : {3}", email.Sender, email.EmailAddress, email.Subject, email.Body);
 
-            _emailSender.SendEmail(email.EmailAddress, email.Sender, email.Subject, email.Body);
+            }
+
             return Task.CompletedTask;
             //call another service
         };
 
-        await channel.BasicConsumeAsync(queue: orderQueueName, autoAck: true, consumer: consumer);
+        await channel.BasicConsumeAsync(queue: orderQueueName, autoAck: false, consumer: consumer);
 
         Console.WriteLine("Waiting for feedback. Press [enter] to exit.");
         Console.ReadLine();

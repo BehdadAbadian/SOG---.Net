@@ -2,5 +2,5 @@
 
 public interface IEmailSender
 {
-    public void SendEmail(string email,string sender, string subject, string messageBody);
+    public bool SendEmail(string email,string sender, string subject, string messageBody);
 }
