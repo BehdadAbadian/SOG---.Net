@@ -1,42 +1,56 @@
-﻿using Notification.Domain.Email;
+﻿using Microsoft.EntityFrameworkCore;
+using Notification.Domain.Email;
 using Notification.Domain.Share;
+using Notification.Infrastructure.Database;
 
 namespace Notification.Infrastructure.Repository;
 
 public class EmailRepository : IEmailRepository
 {
-    public Task CreateAsync(Email email)
+    private readonly NotificationContext _context;
+
+    public EmailRepository(NotificationContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+    public async Task CreateAsync(Email email)
+    {
+        await _context.Emails.AddAsync(email);
     }
 
-    public Task DeleteAsync(long id)
+    public void Delete(Email email)
     {
-        throw new NotImplementedException();
+        _context.Emails.Remove(email);
     }
 
-    public Task<List<Email>> GetAllAsync()
+    public async Task<bool> Exits(long id)
     {
-        throw new NotImplementedException();
+        return await _context.Emails.AnyAsync(x => x.Id == id);
     }
 
-    public Task<List<Email>> GetByEmailAddressAsync(string Email)
+    public async Task<List<Email>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Emails.AsNoTracking().ToListAsync();
     }
 
-    public Task<Email> GetByIdAsync(long id)
+    public async Task<List<Email>> GetByEmailAddressAsync(string Email)
     {
-        throw new NotImplementedException();
+        return await _context.Emails.AsNoTracking().Where(x => x.EmailAddress == Email).ToListAsync();
     }
 
-    public Task<List<Email>> GetByStatusAsync(Status status)
+    public async Task<Email> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        
+        return await _context.Emails.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public Task UpdateAsync(Email email)
+    public async Task<List<Email>> GetByStatusAsync(Status status)
     {
-        throw new NotImplementedException();
+        return await _context.Emails.Where(x => x.EmailStatus == status).ToListAsync();
+    }
+
+    public void Update(Email email)
+    {
+        _context.Emails.Update(email);
     }
 }

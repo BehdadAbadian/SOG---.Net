@@ -24,6 +24,7 @@ try
     // Add services to the container.
     builder.Services.AddHostedService<EmailConsumerHostedService>();
 
+
     builder.Services.AddOptions();
     builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
 
@@ -34,10 +35,9 @@ try
 
     builder.Services.AddMediatR(o => 
     {
-        o.RegisterServicesFromAssembly(typeof(SaveEmailCommand).Assembly);
+        o.RegisterServicesFromAssemblyContaining(typeof(SaveEmailCommand));
     });
-
-
+ 
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     var app = builder.Build();

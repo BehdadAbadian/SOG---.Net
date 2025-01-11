@@ -17,12 +17,12 @@ public class SaveEmailCommandRespond
     public long Id { get; set; }
 }
 
-public class Handler : IRequestHandler<SaveEmailCommand, SaveEmailCommandRespond>
+public class EmailHandler : IRequestHandler<SaveEmailCommand, SaveEmailCommandRespond>
 {
     private readonly IEmailRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public Handler(IEmailRepository repository, IUnitOfWork unitOfWork)
+    public EmailHandler(IEmailRepository repository, IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;

@@ -7,7 +7,7 @@ namespace Notification.Infrastructure.Database
     public class NotificationContext : DbContext
     {
         public DbSet<Email> Emails { get; set; }
-        public NotificationContext(DbContextOptions<NotificationContext> options) : base(options) { }
+        public NotificationContext(DbContextOptions<NotificationContext> options) : base(options) { }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var assembly = typeof(EmailConfiguration).Assembly;
