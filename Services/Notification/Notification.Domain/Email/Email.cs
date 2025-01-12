@@ -33,7 +33,11 @@ public class Email
     public void ChangeStatus(Status status)
     {
         EmailStatus = status;
-        SendDate = DateTime.Now;
+        if(status == Status.Success)
+        {
+            SendDate = DateTime.Now;
+        }
+        
     }
 
 }

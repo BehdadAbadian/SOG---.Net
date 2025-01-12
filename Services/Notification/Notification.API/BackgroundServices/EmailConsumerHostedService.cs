@@ -31,7 +31,7 @@ public class EmailConsumerHostedService : BackgroundService
         await channel.QueueDeclareAsync(queue: orderQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
-        consumer.ReceivedAsync += async (model, ea) =>
+        consumer.ReceivedAsync +=  async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
@@ -43,27 +43,26 @@ public class EmailConsumerHostedService : BackgroundService
             var success = _emailSender.SendEmail(email.EmailAddress, email.Sender, email.Subject, email.Body);
             if (success)
             {
-                await channel.BasicAckAsync(ea.DeliveryTag, false);
-                await _mediator.Send(new UpdateStatusCommand { Id = Remail.Id, EmailStatus = Status.Success });
+                //await channel.BasicAckAsync(ea.DeliveryTag, false);
+                 await _mediator.Send(new UpdateStatusCommand { Id = Remail.Id, EmailStatus = Status.Success });
                 Log.Information("Email Successfully Send : Sender {0}, EmailAddress : {1}, Subject : {2}, Body : {3}", email.Sender, email.EmailAddress, email.Subject, email.Body);
             }
             else
             {
-                await channel.BasicRejectAsync(ea.DeliveryTag, true);
-                await _mediator.Send(new UpdateStatusCommand { Id = Remail.Id, EmailStatus = Status.Failed });
+                //await channel.BasicRejectAsync(ea.DeliveryTag, true);
+                 await _mediator.Send(new UpdateStatusCommand { Id = Remail.Id, EmailStatus = Status.Failed });
                 Log.Warning("Email Send Failed : Sender {0}, EmailAddress : {1}, Subject : {2}, Body : {3}", email.Sender, email.EmailAddress, email.Subject, email.Body);
 
             }
 
-            
+            //return Task.CompletedTask;
             //call another service
         };
 
-        await channel.BasicConsumeAsync(queue: orderQueueName, autoAck: false, consumer: consumer);
-
+        //await channel.BasicConsumeAsync(queue: orderQueueName, autoAck: false, consumer: consumer);
+        await channel.BasicConsumeAsync(queue: orderQueueName, autoAck: true, consumer: consumer);
         Console.WriteLine("Waiting for feedback. Press [enter] to exit.");
         Console.ReadLine();
-
 
     }
 }

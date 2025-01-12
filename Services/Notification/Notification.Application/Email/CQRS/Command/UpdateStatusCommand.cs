@@ -1,6 +1,9 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Notification.Domain.Email;
 using Notification.Domain.Share;
+using Notification.Infrastructure.Database;
 using Notification.Infrastructure.Pattern;
 using Serilog;
 
@@ -14,24 +17,25 @@ public class UpdateStatusCommand : IRequest
 
 public class StatusHandler : IRequestHandler<UpdateStatusCommand>
 {
-    private readonly IEmailRepository _repository;
-    private readonly IUnitOfWork _unitOf;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public StatusHandler(IEmailRepository repository, IUnitOfWork unitOf)
+    public StatusHandler(IServiceScopeFactory scopeFactory)
     {
-        _repository = repository;
-        _unitOf = unitOf;
+        _scopeFactory = scopeFactory;
     }
     public async Task Handle(UpdateStatusCommand request, CancellationToken cancellationToken)
     {
-        if(await _repository.Exits(request.Id))
+        using (var scope = _scopeFactory.CreateScope())
         {
-            var email = await _repository.GetByIdAsync(request.Id);
-            email.ChangeStatus(request.EmailStatus);
-            await _unitOf.SaveChangesAsync();
-            Log.Information("Status of Email With Id : {0} Change to : {1}", request.Id, request.EmailStatus.ToString());
-        }
+            var _context = scope.ServiceProvider.GetRequiredService<NotificationContext>();
+            if(await _context.Emails.AnyAsync(x => x.Id == request.Id))
+            {
+                var email = await _context.Emails.FirstOrDefaultAsync(x => x.Id == request.Id);
+                email.ChangeStatus(request.EmailStatus);
+                await _context.SaveChangesAsync();
+                Log.Information("Status of Email With Id : {0} Change to : {1}", request.Id, request.EmailStatus.ToString());
+            }
             
-
+        }
     }
 }

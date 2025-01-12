@@ -14,7 +14,7 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
-Log.Information("Starting up Security Project");
+Log.Information("Starting up Notificaion Project");
 
 try
 {
@@ -23,6 +23,7 @@ try
 
     // Add services to the container.
     builder.Services.AddHostedService<EmailConsumerHostedService>();
+    builder.Services.AddHostedService<ReSendFailedEmailHostedService>();
 
 
     builder.Services.AddOptions();
@@ -41,7 +42,7 @@ try
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     var app = builder.Build();
-
+    //app.AddDataBaseScope();
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {

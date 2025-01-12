@@ -1,5 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using Notification.Application.Contracts.Interface;
 using Notification.Domain.Email;
+using Notification.Infrastructure.Database;
 using Notification.Infrastructure.Pattern;
 using Serilog;
 
@@ -19,20 +22,22 @@ public class SaveEmailCommandRespond
 
 public class EmailHandler : IRequestHandler<SaveEmailCommand, SaveEmailCommandRespond>
 {
-    private readonly IEmailRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public EmailHandler(IEmailRepository repository, IUnitOfWork unitOfWork)
+    public EmailHandler(IServiceScopeFactory scopeFactory)
     {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
+        _scopeFactory = scopeFactory;
     }
     public async Task<SaveEmailCommandRespond> Handle(SaveEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body);
-        await _repository.CreateAsync(entity);
-        await _unitOfWork.SaveChangesAsync();
-        Log.Information("New Email Insert To DB");
-        return new SaveEmailCommandRespond { Id = entity.Id };
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var _context = scope.ServiceProvider.GetRequiredService<NotificationContext>();
+            var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body);
+            await _context.Emails.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            Log.Information("New Email Insert To DB");
+            return new SaveEmailCommandRespond { Id = entity.Id };
+        }        
     }
 }

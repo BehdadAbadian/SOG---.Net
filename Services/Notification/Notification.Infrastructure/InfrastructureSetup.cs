@@ -9,8 +9,8 @@ public static class InfrastructureSetup
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
-        services.AddTransient<IEmailRepository, EmailRepository>();
+        //services.AddScoped<IUnitOfWork, UnitOfWork>();
+        //services.AddScoped<IEmailRepository, EmailRepository>();
 
 
 
