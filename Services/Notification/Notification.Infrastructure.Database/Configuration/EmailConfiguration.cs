@@ -16,6 +16,7 @@ public class EmailConfiguration : IEntityTypeConfiguration<Email>
         builder.Property(x => x.SendDate).IsRequired();
         builder.Property(x => x.CreationDate).IsRequired();
         builder.Property(x => x.EmailStatus).IsRequired();
+        builder.Property(x => x.TryCount).IsRequired();
 
     }
 }

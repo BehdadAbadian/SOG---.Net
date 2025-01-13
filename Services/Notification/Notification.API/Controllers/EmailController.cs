@@ -27,7 +27,7 @@ namespace Notification.API.Controllers
         public async Task<IActionResult> SendEmail() 
         {
             _emailSender.SendEmail("behdad.abadian@gmail.com", "Catalog", "Hi", "Welcome");
-            var e = Email.CreateNew("as", "dvvd", "dcd", "scs");
+            var e = Email.CreateNew("as", "dvvd", "dcd", "scs",5);
             await repository.CreateAsync(e);
             await unit.SaveChangesAsync();
             return Accepted();

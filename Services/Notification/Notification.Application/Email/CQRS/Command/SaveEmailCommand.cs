@@ -33,7 +33,7 @@ public class EmailHandler : IRequestHandler<SaveEmailCommand, SaveEmailCommandRe
         using (var scope = _scopeFactory.CreateScope())
         {
             var _context = scope.ServiceProvider.GetRequiredService<NotificationContext>();
-            var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body);
+            var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body,5);
             await _context.Emails.AddAsync(entity);
             await _context.SaveChangesAsync();
             Log.Information("New Email Insert To DB");

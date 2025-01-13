@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Notification.Domain.Email;
 using Notification.Domain.Share;
 using Notification.Infrastructure.Database;
-using Notification.Infrastructure.Pattern;
 using Serilog;
 
 namespace Notification.Application.Email.CQRS.Command;

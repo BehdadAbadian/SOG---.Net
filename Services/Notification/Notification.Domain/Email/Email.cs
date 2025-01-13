@@ -12,12 +12,13 @@ public class Email
     public DateTime CreationDate { get; private set; }
     public DateTime SendDate { get; private set; }
     public Status EmailStatus { get; private set; }
+    public int TryCount { get; private set; }
 
     private Email()
     {
         
     }
-    private Email(string sender, string emailAddress, string subject, string body)
+    private Email(string sender, string emailAddress, string subject, string body,int tryCount)
     {
         Sender = sender;
         EmailAddress = emailAddress;
@@ -25,10 +26,11 @@ public class Email
         Body = body;
         CreationDate = DateTime.Now;
         EmailStatus = Status.InProgress;
+        TryCount = tryCount;
     }
-    public static Email CreateNew(string sender, string emailAddress, string subject, string body)
+    public static Email CreateNew(string sender, string emailAddress, string subject, string body, int tryCount)
     {
-        return new Email(sender, emailAddress, subject, body);
+        return new Email(sender, emailAddress, subject, body, tryCount);
     }
     public void ChangeStatus(Status status)
     {
