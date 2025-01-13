@@ -40,7 +40,7 @@ public class EmailConsumerHostedService : BackgroundService
 
             var Remail = await _mediator.Send(new SaveEmailCommand{Sender = email.Sender, EmailAddress = email.EmailAddress, Subject = email.Subject, Body = email.Body});
             
-            var success = _emailSender.SendEmail(email.EmailAddress, email.Sender, email.Subject, email.Body);
+            var success = await _emailSender.SendEmail(email.EmailAddress, email.Sender, email.Subject, email.Body);
             if (success)
             {
                 //await channel.BasicAckAsync(ea.DeliveryTag, false);

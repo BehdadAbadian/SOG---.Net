@@ -7,4 +7,6 @@ public class EmailConfiguration
     public int Port { get; set; }
     public string UserName { get; set; }
     public string Password { get; set; }
+    public int ReSendTime { get; set; }
+    public int TryCount { get; set; }
 }

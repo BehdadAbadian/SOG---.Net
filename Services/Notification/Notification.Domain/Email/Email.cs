@@ -41,5 +41,10 @@ public class Email
         }
         
     }
+    public void ChangeTryCount()
+    {
+        if(TryCount > 0)
+            TryCount--;
+    }
 
 }

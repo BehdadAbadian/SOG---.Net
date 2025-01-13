@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Notification.Application.Contracts.Interface;
+using Notification.Application.Contracts.Share;
 using Notification.Domain.Email;
 using Notification.Infrastructure.Database;
 using Notification.Infrastructure.Pattern;
@@ -23,17 +25,19 @@ public class SaveEmailCommandRespond
 public class EmailHandler : IRequestHandler<SaveEmailCommand, SaveEmailCommandRespond>
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly EmailConfiguration _emailConfiguration;
 
-    public EmailHandler(IServiceScopeFactory scopeFactory)
+    public EmailHandler(IServiceScopeFactory scopeFactory, IOptions<EmailConfiguration> options)
     {
         _scopeFactory = scopeFactory;
+        _emailConfiguration = options.Value;
     }
     public async Task<SaveEmailCommandRespond> Handle(SaveEmailCommand request, CancellationToken cancellationToken)
     {
         using (var scope = _scopeFactory.CreateScope())
         {
             var _context = scope.ServiceProvider.GetRequiredService<NotificationContext>();
-            var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body,5);
+            var entity = Domain.Email.Email.CreateNew(request.Sender, request.EmailAddress, request.Subject, request.Body,_emailConfiguration.TryCount);
             await _context.Emails.AddAsync(entity);
             await _context.SaveChangesAsync();
             Log.Information("New Email Insert To DB");

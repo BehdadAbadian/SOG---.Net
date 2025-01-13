@@ -16,7 +16,7 @@ public class EmailSenderService : IEmailSender
     {
         _configuration = options.Value;
     }
-    public bool SendEmail(string email,string sender, string subject, string messageBody)
+    public async Task<bool> SendEmail(string email,string sender, string subject, string messageBody)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(sender, _configuration.From));
